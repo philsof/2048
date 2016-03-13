@@ -31,16 +31,66 @@ function game() {
   this.move = function(direction){
     this.removeZeros();
     var board = this.board;
+    var newRow = [];
     if (direction === "left"){
+      for(var i = 0; i < board.length; i++) {
+        newRow = [];
+        if (board[i].length > 1){
+          if (board[i].length === 2){
+            if (board[i][0] === board[i][1]){
+              newRow.push(board[i][0] * 2);
+            } else {
+              newRow.push(board[i][0]);
+              newRow.push(board[i][1]);
+            }
+          } else if (board[i].length === 3) {
+            if (board[i][0] === board[i][1]){
+              newRow.push(board[i][0] * 2);
+              newRow.push(board[i][2]);
+            } else if (board[i][1] === board[i][2]){
+              newRow.push(board[i][0]);
+              newRow.push(board[i][1] * 2);
+            } else {
+              newRow.push(board[i][0]);
+              newRow.push(board[i][1]);
+              newRow.push(board[i][2]);
+            }
+          } else if (board[i].length === 4){
+            if (board[i][0] === board[i][1]){
+              newRow.push(board[i][0] * 2);
+              if (board[i][2] === board[i][3]){
+                newRow.push(board[i][2] * 2);
+              } else {
+                newRow.push(board[i][2]);
+                newRow.push(board[i][3]);
+              }
+            } else if (board[i][1] === board[i][2]){
+              newRow.push(board[i][0]);
+              newRow.push(board[i][1] * 2);
+              newRow.push(board[i][3]);
+            } else if (board[i][2] === board[i][3]){
+              newRow.push(board[i][0]);
+              newRow.push(board[i][1]);
+              newRow.push(board[i][2] * 2);
+            } else {
+              newRow = board[i];
+            }
+          }
+          this.board[i] = newRow;
+        }
+      } 
     } 
     if (direction === "right"){
+      console.log('right');
     }  
     if (direction === "up"){
-    
+      console.log('up');
     }  
     if (direction === "down"){
-    
-    }   
+      console.log('down');
+    } 
+    this.pad();
+    this.spawn();  
   };
   this.removeZeros = function(){
     var board = this.board;
@@ -51,6 +101,30 @@ function game() {
         }
       }
     }
+    this.board = board;
+  };
+  this.pad = function(){
+    var board = this.board;
+    for(var i = 0; i < board.length; i++) {
+      while (board[i].length < 4){
+        board[i].push(0); 
+      }
+    }
+    this.board = board;
+  };
+  this.spawn = function(){
+    var board = this.board;
+    var emptySpaces = [];
+    for(var i = 0; i < board.length; i++) {
+      for(var j = 0; j < board[i].length; j++) {
+        if (board[i][j] === 0){
+          emptySpaces.push([i, j]);
+        }
+      }
+    }
+    var randIndex = Math.floor(Math.random() * board.length);
+    var randSpace = emptySpaces[randIndex];
+    board[randSpace[0]][randSpace[1]] = 2;
     this.board = board;
   };
 }
@@ -95,5 +169,6 @@ $(document).ready(function(){
         Game.move('down');
         break;
     }
+    View.displayBoard(Game.board);
   });
 });
