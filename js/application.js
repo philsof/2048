@@ -1,6 +1,3 @@
-
-
-
 function game() {
   this.board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
   this.generateStartBoard = function(){
@@ -31,6 +28,31 @@ function game() {
     this.board = board;
     return board;
   };
+  this.move = function(direction){
+    this.removeZeros();
+    var board = this.board;
+    if (direction === "left"){
+    } 
+    if (direction === "right"){
+    }  
+    if (direction === "up"){
+    
+    }  
+    if (direction === "down"){
+    
+    }   
+  };
+  this.removeZeros = function(){
+    var board = this.board;
+    for(var i = 0; i < board.length; i++) {
+      for(var j = board[i].length - 1; j >= 0; j--) {
+        if(board[i][j] === 0) {
+           board[i].splice(j, 1);
+        }
+      }
+    }
+    this.board = board;
+  };
 }
 
 
@@ -58,5 +80,20 @@ var startingBoard = Game.generateStartBoard();
 
 $(document).ready(function(){
   View.displayBoard(startingBoard);
-
+  $(document).on('keyup', function(event){
+    switch (event.which) {
+      case 37:
+        Game.move('left');
+        break;
+      case 38:
+        Game.move('up');
+        break;
+      case 39:
+        Game.move('right');
+        break;
+      case 40:
+        Game.move('down');
+        break;
+    }
+  });
 });
