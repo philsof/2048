@@ -28,60 +28,22 @@ function game() {
     this.board = board;
     return board;
   };
+  this.horizontalReverse = function(){
+    for(var i = 0; i < this.board.length; i++) {
+      this.board[i].reverse();
+    }
+  };
   this.move = function(direction){
     this.removeZeros();
-    var board = this.board;
-    var newRow = [];
     if (direction === "left"){
-      for(var i = 0; i < board.length; i++) {
-        newRow = [];
-        if (board[i].length > 1){
-          if (board[i].length === 2){
-            if (board[i][0] === board[i][1]){
-              newRow.push(board[i][0] * 2);
-            } else {
-              newRow.push(board[i][0]);
-              newRow.push(board[i][1]);
-            }
-          } else if (board[i].length === 3) {
-            if (board[i][0] === board[i][1]){
-              newRow.push(board[i][0] * 2);
-              newRow.push(board[i][2]);
-            } else if (board[i][1] === board[i][2]){
-              newRow.push(board[i][0]);
-              newRow.push(board[i][1] * 2);
-            } else {
-              newRow.push(board[i][0]);
-              newRow.push(board[i][1]);
-              newRow.push(board[i][2]);
-            }
-          } else if (board[i].length === 4){
-            if (board[i][0] === board[i][1]){
-              newRow.push(board[i][0] * 2);
-              if (board[i][2] === board[i][3]){
-                newRow.push(board[i][2] * 2);
-              } else {
-                newRow.push(board[i][2]);
-                newRow.push(board[i][3]);
-              }
-            } else if (board[i][1] === board[i][2]){
-              newRow.push(board[i][0]);
-              newRow.push(board[i][1] * 2);
-              newRow.push(board[i][3]);
-            } else if (board[i][2] === board[i][3]){
-              newRow.push(board[i][0]);
-              newRow.push(board[i][1]);
-              newRow.push(board[i][2] * 2);
-            } else {
-              newRow = board[i];
-            }
-          }
-          this.board[i] = newRow;
-        }
-      } 
-    } 
+      this.left();
+      this.pad();
+    }
     if (direction === "right"){
-      console.log('right');
+      this.horizontalReverse();
+      this.left();
+      this.pad();
+      this.horizontalReverse();
     }  
     if (direction === "up"){
       console.log('up');
@@ -89,8 +51,58 @@ function game() {
     if (direction === "down"){
       console.log('down');
     } 
-    this.pad();
+    
     this.spawn();  
+  };
+  this.left = function(){
+    var board = this.board;
+    var newRow = [];
+    for(var i = 0; i < board.length; i++) {
+      newRow = [];
+      if (board[i].length > 1){
+        if (board[i].length === 2){
+          if (board[i][0] === board[i][1]){
+            newRow.push(board[i][0] * 2);
+          } else {
+            newRow.push(board[i][0]);
+            newRow.push(board[i][1]);
+          }
+        } else if (board[i].length === 3) {
+          if (board[i][0] === board[i][1]){
+            newRow.push(board[i][0] * 2);
+            newRow.push(board[i][2]);
+          } else if (board[i][1] === board[i][2]){
+            newRow.push(board[i][0]);
+            newRow.push(board[i][1] * 2);
+          } else {
+            newRow.push(board[i][0]);
+            newRow.push(board[i][1]);
+            newRow.push(board[i][2]);
+          }
+        } else if (board[i].length === 4){
+          if (board[i][0] === board[i][1]){
+            newRow.push(board[i][0] * 2);
+            if (board[i][2] === board[i][3]){
+              newRow.push(board[i][2] * 2);
+            } else {
+              newRow.push(board[i][2]);
+              newRow.push(board[i][3]);
+            }
+          } else if (board[i][1] === board[i][2]){
+            newRow.push(board[i][0]);
+            newRow.push(board[i][1] * 2);
+            newRow.push(board[i][3]);
+          } else if (board[i][2] === board[i][3]){
+            newRow.push(board[i][0]);
+            newRow.push(board[i][1]);
+            newRow.push(board[i][2] * 2);
+          } else {
+            newRow = board[i];
+          }
+        }
+        this.board[i] = newRow;
+      }
+    } 
   };
   this.removeZeros = function(){
     var board = this.board;
