@@ -33,23 +33,61 @@ function game() {
       this.board[i].reverse();
     }
   };
+  
   this.move = function(direction){
-    this.removeZeros();
+    
+    
     if (direction === "left"){
+      this.removeZeros();
       this.left();
       this.pad();
     }
     if (direction === "right"){
+      this.removeZeros();
       this.horizontalReverse();
       this.left();
       this.pad();
       this.horizontalReverse();
     }  
     if (direction === "up"){
-      console.log('up');
+      var board = this.board;
+      var transposedBoard = board[0].map(function(col, i) { 
+        return board.map(function(row) { 
+          return row[i] 
+        })
+      });
+      this.board = transposedBoard;
+      this.removeZeros();
+      this.left();
+      this.pad();
+      var board = this.board;
+      var transposedBoard = board[0].map(function(col, i) { 
+        return board.map(function(row) { 
+          return row[i] 
+        })
+      });
+      this.board = transposedBoard;
     }  
     if (direction === "down"){
-      console.log('down');
+      var board = this.board;
+      var transposedBoard = board[0].map(function(col, i) { 
+        return board.map(function(row) { 
+          return row[i] 
+        })
+      });
+      this.board = transposedBoard;
+      this.removeZeros();
+      this.horizontalReverse();
+      this.left();
+      this.pad();
+      this.horizontalReverse();
+      var board = this.board;
+      var transposedBoard = board[0].map(function(col, i) { 
+        return board.map(function(row) { 
+          return row[i] 
+        })
+      });
+      this.board = transposedBoard;
     } 
     
     this.spawn();  
