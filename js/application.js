@@ -69,7 +69,12 @@ function game() {
   this.move = function(direction){
     //need to debug this: previousBoard not behaving
     //as expected
-    this.previousBoard = this.board;
+    var boardCopy = [];
+
+    for (var i = 0; i < this.board.length; i++){
+      boardCopy[i] = this.board[i].slice();
+    }
+    this.previousBoard = boardCopy;
     
     if (direction === "left"){
       this.removeZeros();
@@ -196,6 +201,8 @@ function game() {
   };
   this.spawn = function(){
     var board = this.board;
+    
+
     var previousBoard = this.previousBoard;
     if (board.equals(previousBoard)){
       return;
