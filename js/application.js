@@ -67,6 +67,8 @@ function game() {
   this.previousBoard = [];
   
   this.move = function(direction){
+    //need to debug this: previousBoard not behaving
+    //as expected
     this.previousBoard = this.board;
     
     if (direction === "left"){
@@ -193,11 +195,11 @@ function game() {
     this.board = board;
   };
   this.spawn = function(){
-    // debugger;
-    if (this.board.equals(this.previousBoard)){
+    var board = this.board;
+    var previousBoard = this.previousBoard;
+    if (board.equals(previousBoard)){
       return;
     }
-    var board = this.board;
     var emptySpaces = [];
     for(var i = 0; i < board.length; i++) {
       for(var j = 0; j < board[i].length; j++) {
