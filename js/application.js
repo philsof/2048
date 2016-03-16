@@ -28,7 +28,7 @@ Array.prototype.equals = function (array) {
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
-function game() {
+function Game() {
   this.board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
   this.generateStartBoard = function(){
     var found, board;
@@ -58,7 +58,7 @@ function game() {
     this.board = board;
     return board;
   };
-  this.horizontalReverse = function(){
+  this.reverseBoard = function(){
     for(var i = 0; i < this.board.length; i++) {
       this.board[i].reverse();
     }
@@ -83,50 +83,50 @@ function game() {
     }
     if (direction === "right"){
       this.removeZeros();
-      this.horizontalReverse();
+      this.reverseBoard();
       this.left();
       this.pad();
-      this.horizontalReverse();
+      this.reverseBoard();
     }  
     if (direction === "up"){
       var board = this.board;
-      var transposedBoard = board[0].map(function(col, i) { 
+      var transposeBoard = board[0].map(function(col, i) { 
         return board.map(function(row) { 
           return row[i] 
         })
       });
-      this.board = transposedBoard;
+      this.board = transposeBoard;
       this.removeZeros();
       this.left();
       this.pad();
       var board = this.board;
-      var transposedBoard = board[0].map(function(col, i) { 
+      var transposeBoard = board[0].map(function(col, i) { 
         return board.map(function(row) { 
           return row[i] 
         })
       });
-      this.board = transposedBoard;
+      this.board = transposeBoard;
     }  
     if (direction === "down"){
       var board = this.board;
-      var transposedBoard = board[0].map(function(col, i) { 
+      var transposeBoard = board[0].map(function(col, i) { 
         return board.map(function(row) { 
           return row[i] 
         })
       });
-      this.board = transposedBoard;
+      this.board = transposeBoard;
       this.removeZeros();
-      this.horizontalReverse();
+      this.reverseBoard();
       this.left();
       this.pad();
-      this.horizontalReverse();
+      this.reverseBoard();
       var board = this.board;
-      var transposedBoard = board[0].map(function(col, i) { 
+      var transposeBoard = board[0].map(function(col, i) { 
         return board.map(function(row) { 
           return row[i] 
         })
       });
-      this.board = transposedBoard;
+      this.board = transposeBoard;
     }  
   };
   this.left = function(){
@@ -247,29 +247,29 @@ function view() {
 
 }
 
-var Game = new game(); 
+var game = new Game(); 
 var View = new view();
-var startingBoard = Game.generateStartBoard();
+var startingBoard = game.generateStartBoard();
 
 $(document).ready(function(){
   View.displayBoard(startingBoard);
   $(document).on('keyup', function(event){
     switch (event.which) {
       case 37:
-        Game.move('left');
+        game.move('left');
         break;
       case 38:
-        Game.move('up');
+        game.move('up');
         break;
       case 39:
-        Game.move('right');
+        game.move('right');
         break;
       case 40:
-        Game.move('down');
+        game.move('down');
         break;
     }
-    View.displayBoard(Game.board);
-    setTimeout(function(){ Game.spawn(); View.displayBoard(Game.board); }, 500);
+    View.displayBoard(game.board);
+    setTimeout(function(){ game.spawn(); View.displayBoard(game.board); }, 500);
     
   });
 });
