@@ -24,7 +24,7 @@ Array.prototype.equals = function (array) {
         }           
     }       
     return true;
-}
+};
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
@@ -67,14 +67,12 @@ function Game() {
   this.previousBoard = [];
   
   this.move = function(direction){
-    //need to debug this: previousBoard not behaving
-    //as expected
-    var boardCopy = [];
+      var boardCopy = [];
 
-    for (var i = 0; i < this.board.length; i++){
-      boardCopy[i] = this.board[i].slice();
-    }
-    this.previousBoard = boardCopy;
+      for (var i = 0; i < this.board.length; i++){
+        boardCopy[i] = this.board[i].slice();
+      }
+      this.previousBoard = boardCopy;
     
     if (direction === "left"){
       this.removeZeros();
@@ -201,8 +199,6 @@ function Game() {
   };
   this.spawn = function(){
     var board = this.board;
-    
-
     var previousBoard = this.previousBoard;
     if (board.equals(previousBoard)){
       return;
@@ -224,11 +220,18 @@ function Game() {
     board[randSpace[0]][randSpace[1]] = 2;
     this.board = board;
   };
+  this.checkIfWon = function(){
+    for(var i = 0; i < this.board.length; i++) {
+      if ($.inArray(2048, this.board[i]) !== -1){
+        alert("YOU GOT 2048! YOU WON!");
+      }
+    }
+  };
 }
 
 
 
-function view() {
+function View() {
   this.displayBoard = function(board){
     var boardHTML = "";
     for(var i = 0; i < board.length; i++) {
@@ -247,29 +250,42 @@ function view() {
 
 }
 
-var game = new Game(); 
-var View = new view();
-var startingBoard = game.generateStartBoard();
+function Controller(game, view) {
+   this.game = game;
+   this.view = view;
+}
+
+Controller.prototype.move = function(direction) {
+  this.game.move(direction);
+  this.view.displayBoard(this.game.board);
+  this.game.checkIfWon();
+  setTimeout(function(){ this.game.spawn(); this.view.displayBoard(this.game.board); }, 100);
+};
+
+Controller.prototype.start = function() {
+  this.view.displayBoard(this.game.generateStartBoard());
+};
+
 
 $(document).ready(function(){
-  View.displayBoard(startingBoard);
+  game = new Game(); 
+  view = new View();
+  ctrl = new Controller(game, view);
+  ctrl.start();
   $(document).on('keyup', function(event){
     switch (event.which) {
       case 37:
-        game.move('left');
+        ctrl.move('left');
         break;
       case 38:
-        game.move('up');
+        ctrl.move('up');
         break;
       case 39:
-        game.move('right');
+        ctrl.move('right');
         break;
       case 40:
-        game.move('down');
+        ctrl.move('down');
         break;
     }
-    View.displayBoard(game.board);
-    setTimeout(function(){ game.spawn(); View.displayBoard(game.board); }, 500);
-    
   });
 });
