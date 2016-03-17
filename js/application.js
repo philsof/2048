@@ -200,9 +200,9 @@ function Game() {
   this.spawn = function(){
     var board = this.board;
     var previousBoard = this.previousBoard;
-    if (board.equals(previousBoard)){
-      return;
-    }
+    // if (board.equals(previousBoard)){
+    //   return;
+    // }
     var emptySpaces = [];
     for(var i = 0; i < board.length; i++) {
       for(var j = 0; j < board[i].length; j++) {
@@ -211,20 +211,48 @@ function Game() {
         }
       }
     }
-    if (emptySpaces.length < 1){
-      alert("Game Over!");
+
+    if (emptySpaces.length === 0){
+      this.gameOver();
       return;
     }
+
     var randIndex = Math.floor(Math.random() * emptySpaces.length);
     var randSpace = emptySpaces[randIndex];
     board[randSpace[0]][randSpace[1]] = 2;
     this.board = board;
+
+    
+
   };
   this.checkIfWon = function(){
     for(var i = 0; i < this.board.length; i++) {
       if ($.inArray(2048, this.board[i]) !== -1){
         alert("YOU GOT 2048! YOU WON!");
       }
+    }
+  };
+  this.gameOver = function(){
+    //simulate all four moves, if none of them change board, game is over
+    var match = false;
+    for(var i = 0; i < this.board.length-1; i++) {
+      for(var j = 0; j < this.board[i].length; j++){
+        if (this.board[i][j] === this.board[i+1][j]){
+          match = true;
+        }  
+      }
+    }
+
+    for(var i = 0; i < this.board.length; i++) {
+      for(var j = 0; j < this.board[i].length-1; j++){
+        if (this.board[i][j] === this.board[i][j+1]){
+          match = true;
+        }  
+      }
+    }
+
+    if (match === false){
+       alert("Game Over!");
     }
   };
 }
