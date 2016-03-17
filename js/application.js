@@ -232,7 +232,11 @@ function Game() {
 
 
 function View() {
-  this.displayBoard = function(board){
+  this.displayElement = document.getElementById('board');
+  this.document = document;
+  this.setupEventHandling();
+}
+  View.prototype.displayBoard = function(board){
     var boardHTML = "";
     for(var i = 0; i < board.length; i++) {
       boardHTML += '<tr>';
@@ -248,7 +252,12 @@ function View() {
     document.getElementById("board").innerHTML = boardHTML;
   };
 
-}
+
+View.prototype.setupEventHandling = function() {
+  this.document.addEventListener("click", function(){
+    document.getElementById("demo").innerHTML = "Hello World";
+});
+};
 
 function Controller(game, view) {
    this.game = game;
