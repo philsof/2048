@@ -331,4 +331,7 @@ $(document).ready(function(){
         break;
     }
   });
+  $('#new-game-button').on('click', function(event){
+    location.reload();
+  });
 });
