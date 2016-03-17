@@ -206,10 +206,7 @@ function Game() {
   };
   this.spawn = function(){
     var board = this.board;
-    var previousBoard = this.previousBoard;
-    // if (board.equals(previousBoard)){
-    //   return;
-    // }
+    var previousBoard = this.previousBoard;    
     var emptySpaces = [];
     for(var i = 0; i < board.length; i++) {
       for(var j = 0; j < board[i].length; j++) {
@@ -223,14 +220,13 @@ function Game() {
       this.gameOver();
       return;
     }
-
+    if (board.equals(previousBoard)){
+      return;
+    }
     var randIndex = Math.floor(Math.random() * emptySpaces.length);
     var randSpace = emptySpaces[randIndex];
     board[randSpace[0]][randSpace[1]] = 2;
     this.board = board;
-
-    
-
   };
   this.checkIfWon = function(){
     for(var i = 0; i < this.board.length; i++) {
@@ -294,9 +290,7 @@ function View() {
 
 
 View.prototype.setupEventHandling = function() {
-  this.document.addEventListener("click", function(){
-    document.getElementById("demo").innerHTML = "Hello World";
-});
+  
 };
 
 function Controller(game, view) {
