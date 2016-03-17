@@ -136,6 +136,7 @@ function Game() {
         if (board[i].length === 2){
           if (board[i][0] === board[i][1]){
             newRow.push(board[i][0] * 2);
+            this.score += board[i][0] * 2;
           } else {
             newRow.push(board[i][0]);
             newRow.push(board[i][1]);
@@ -143,10 +144,12 @@ function Game() {
         } else if (board[i].length === 3) {
           if (board[i][0] === board[i][1]){
             newRow.push(board[i][0] * 2);
+            this.score += board[i][0] * 2;
             newRow.push(board[i][2]);
           } else if (board[i][1] === board[i][2]){
             newRow.push(board[i][0]);
             newRow.push(board[i][1] * 2);
+            this.score += board[i][1] * 2;
           } else {
             newRow.push(board[i][0]);
             newRow.push(board[i][1]);
@@ -155,8 +158,10 @@ function Game() {
         } else if (board[i].length === 4){
           if (board[i][0] === board[i][1]){
             newRow.push(board[i][0] * 2);
+            this.score += board[i][0] * 2;
             if (board[i][2] === board[i][3]){
               newRow.push(board[i][2] * 2);
+              this.score += board[i][2] * 2;
             } else {
               newRow.push(board[i][2]);
               newRow.push(board[i][3]);
@@ -164,11 +169,13 @@ function Game() {
           } else if (board[i][1] === board[i][2]){
             newRow.push(board[i][0]);
             newRow.push(board[i][1] * 2);
+            this.score += board[i][1] * 2;
             newRow.push(board[i][3]);
           } else if (board[i][2] === board[i][3]){
             newRow.push(board[i][0]);
             newRow.push(board[i][1]);
             newRow.push(board[i][2] * 2);
+            this.score += board[i][2] * 2;
           } else {
             newRow = board[i];
           }
@@ -255,6 +262,8 @@ function Game() {
        alert("Game Over!");
     }
   };
+
+  this.score = 0;
 }
 
 
@@ -264,7 +273,7 @@ function View() {
   this.document = document;
   this.setupEventHandling();
 }
-  View.prototype.displayBoard = function(board){
+  View.prototype.displayBoard = function(board, score){
     var boardHTML = "";
     for(var i = 0; i < board.length; i++) {
       boardHTML += '<tr>';
@@ -277,7 +286,10 @@ function View() {
         }
       boardHTML += '</tr>';
     }
+    var scoreHTML = score.toString();
     document.getElementById("board").innerHTML = boardHTML;
+    document.getElementById("score").innerHTML = scoreHTML;
+
   };
 
 
@@ -294,13 +306,13 @@ function Controller(game, view) {
 
 Controller.prototype.move = function(direction) {
   this.game.move(direction);
-  this.view.displayBoard(this.game.board);
+  this.view.displayBoard(this.game.board, this.game.score);
   this.game.checkIfWon();
-  setTimeout(function(){ this.game.spawn(); this.view.displayBoard(this.game.board); }, 100);
+  setTimeout(function(){ this.game.spawn(); this.view.displayBoard(this.game.board, this.game.score); }, 100);
 };
 
 Controller.prototype.start = function() {
-  this.view.displayBoard(this.game.generateStartBoard());
+  this.view.displayBoard(this.game.generateStartBoard(), this.game.score);
 };
 
 
