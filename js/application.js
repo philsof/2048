@@ -31,6 +31,17 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 function Game() {
   this.board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
   this.generateStartBoard = function(){
+    if (localStorage.score){
+    this.score = parseInt(localStorage.score);
+    }
+
+    if (localStorage.board){
+    this.board = JSON.parse(localStorage.board);
+    return this.board;
+    }
+
+    
+
     var found, board;
     while (found !== 2){
       found = 0;
@@ -302,7 +313,13 @@ Controller.prototype.move = function(direction) {
   this.game.move(direction);
   this.view.displayBoard(this.game.board, this.game.score);
   this.game.checkIfWon();
-  setTimeout(function(){ this.game.spawn(); this.view.displayBoard(this.game.board, this.game.score); }, 100);
+  setTimeout(function(){ 
+    this.game.spawn(); 
+    this.view.displayBoard(this.game.board, this.game.score);
+     localStorage.board = JSON.stringify(this.game.board);
+    localStorage.score = JSON.stringify(this.game.score);
+     }, 100);
+  
 };
 
 Controller.prototype.start = function() {
@@ -332,6 +349,8 @@ $(document).ready(function(){
     }
   });
   $('#new-game-button').on('click', function(event){
+    localStorage.removeItem("board");
+    localStorage.removeItem("score");
     location.reload();
   });
 });
