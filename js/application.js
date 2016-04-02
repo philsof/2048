@@ -1,31 +1,10 @@
 $(document).ready(function(){
   game = new Game(); 
-  view = new View();
-  ctrl = new Controller(game, view);
-  ctrl.start();
-  $(document).on('keyup', function(event){
-    switch (event.which) {
-      case 37:
-        ctrl.move('left');
-        break;
-      case 38:
-        ctrl.move('up');
-        break;
-      case 39:
-        ctrl.move('right');
-        break;
-      case 40:
-        ctrl.move('down');
-        break;
-    }
-  });
+  view = new View({boardDisplay: document.getElementById('board'), scoreDisplay: document.getElementById('score'), newGameButton: document.getElementById('new-game-button')});
+  controller = new Controller(game, view);
+  view.controller = controller;
+  controller.start();
   $('#new-game-button').on('click', function(event){
-    if(typeof(Storage) !== "undefined") {
-      localStorage.removeItem("board");
-      localStorage.removeItem("score");
-    } else {
-      // Sorry! No Web Storage support..
-    }
-    location.reload();
+    controller.newGame();
   });
 });
