@@ -1,7 +1,7 @@
 function View(args) {
   args = args || {}
-  this.boardDisplay = args.boardDisplay;
-  this.scoreDisplay = args.scoreDisplay;
+  this.boardElement = args.boardElement;
+  this.scoreElement = args.scoreElement;
   this.newGameButton = args.newGameButton;
   this.setupHandlers();
 }
@@ -20,8 +20,8 @@ View.prototype.drawBoard = function(board, score){
       }
     boardHTML += '</tr>';
   }
-  this.boardDisplay.innerHTML = boardHTML;
-  this.scoreDisplay.innerHTML = scoreHTML;
+  this.boardElement.innerHTML = boardHTML;
+  this.scoreElement.innerHTML = scoreHTML;
 };
 
 View.prototype.setupHandlers = function() {  
