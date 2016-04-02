@@ -6,7 +6,9 @@ function View(args) {
   this.setupHandlers();
 }
 
-View.prototype.drawBoard = function(board, score){
+View.prototype.drawBoard = function(game){
+  var board = game.board;
+  var score = game.score;
   var boardHTML = "";
   var scoreHTML = score.toString();
   for(var i = 0; i < board.length; i++) {

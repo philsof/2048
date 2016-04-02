@@ -5,22 +5,23 @@ function Controller(game, view) {
 
 Controller.prototype.move = function(direction) {
   this.game.move(direction);
-  this.view.drawBoard(this.game.board, this.game.score);
+  this.view.drawBoard(this.game);
   this.game.checkIfWon();
   setTimeout(function(){ 
     this.game.spawn(); 
-    this.view.drawBoard(this.game.board, this.game.score);
+    this.view.drawBoard(this.game);
     if(typeof(Storage) !== "undefined") {
       localStorage.board = JSON.stringify(this.game.board);
       localStorage.score = JSON.stringify(this.game.score);
     } else {
-    // no storage support
+    // no local storage support
     }
   }, 100);
 };
 
 Controller.prototype.start = function() {
-  this.view.drawBoard(this.game.generateStartBoard(), this.game.score);
+  this.game.generateStartBoard();
+  this.view.drawBoard(this.game);
 };
 
 Controller.prototype.newGame = function() {
