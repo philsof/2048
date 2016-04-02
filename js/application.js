@@ -1,6 +1,6 @@
 // Warn if overriding existing method
-if(Array.prototype.equals)
-    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+if(Array.prototype.equals) {
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."); }
 // attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function (array) {
     // if the other array is a falsy value, return
@@ -316,10 +316,13 @@ Controller.prototype.move = function(direction) {
   setTimeout(function(){ 
     this.game.spawn(); 
     this.view.displayBoard(this.game.board, this.game.score);
-     localStorage.board = JSON.stringify(this.game.board);
-    localStorage.score = JSON.stringify(this.game.score);
-     }, 100);
-  
+    if(typeof(Storage) !== "undefined") {
+      localStorage.board = JSON.stringify(this.game.board);
+      localStorage.score = JSON.stringify(this.game.score);
+    } else {
+    // no storage support
+    }
+  }, 100);
 };
 
 Controller.prototype.start = function() {
@@ -349,8 +352,12 @@ $(document).ready(function(){
     }
   });
   $('#new-game-button').on('click', function(event){
-    localStorage.removeItem("board");
-    localStorage.removeItem("score");
+    if(typeof(Storage) !== "undefined") {
+      localStorage.removeItem("board");
+      localStorage.removeItem("score");
+    } else {
+      // Sorry! No Web Storage support..
+    }
     location.reload();
   });
 });
