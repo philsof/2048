@@ -214,8 +214,18 @@ Game.prototype.spawn = function(){
 };
 
 Game.prototype.checkIfWon = function(){
+  var containsObject = function(obj, list) {
+    var i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i] === obj) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   for(var i = 0; i < this.board.length; i++) {
-    if ($.inArray(2048, this.board[i]) !== -1){
+    if (containsObject(2048, this.board[i])){
       alert("YOU GOT 2048! YOU WON!");
     }
   }
