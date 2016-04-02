@@ -1,44 +1,47 @@
-function Game() {
-  this.board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];  
+function Game(board) {
+  if (board) {
+    this.board = board;
+  } 
+  else { 
+    this.board = this.generateStartBoard();
+  }
   this.previousBoard = [];
   this.score = 0;
 }
-  
+
 Game.prototype.generateStartBoard = function(){
-  var found, board;
+  var found, storedBoard, generatedBoard;
   if (localStorage.score){
     this.score = parseInt(localStorage.score);
   }
-
   if (localStorage.board){
-    this.board = JSON.parse(localStorage.board);
-    return this.board;
+    storedBoard = JSON.parse(localStorage.board);
+    return storedBoard;
   }
   while (found !== 2){
+    generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
     found = 0;
-    board = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    var randIndex1 = Math.floor(Math.random() * board.length);
-    var randIndex2 = Math.floor(Math.random() * board.length);
-    var randIndex3 = Math.floor(Math.random() * board.length);
-    var randIndex4 = Math.floor(Math.random() * board.length);
+    var randIndex1 = Math.floor(Math.random() * generatedBoard.length);
+    var randIndex2 = Math.floor(Math.random() * generatedBoard.length);
+    var randIndex3 = Math.floor(Math.random() * generatedBoard.length);
+    var randIndex4 = Math.floor(Math.random() * generatedBoard.length);
     var startingValues = [2,2,2,2,2,2,2,2,2,4];
     var randStartingValue1 = startingValues[Math.floor(Math.random() * startingValues.length)];
     var randStartingValue2 = startingValues[Math.floor(Math.random() * startingValues.length)];
-    board[randIndex1][randIndex2] = randStartingValue1;
-    board[randIndex3][randIndex4] = randStartingValue2;
-    for(var i = 0; i < board.length; i++) {
-      for(var j = 0; j < board[i].length; j++) {
-        if (board[i][j] === 2){
+    generatedBoard[randIndex1][randIndex2] = randStartingValue1;
+    generatedBoard[randIndex3][randIndex4] = randStartingValue2;
+    for(var i = 0; i < generatedBoard.length; i++) {
+      for(var j = 0; j < generatedBoard[i].length; j++) {
+        if (generatedBoard[i][j] === 2){
           found++;
         }
-        if (board[i][j] === 4){
+        if (generatedBoard[i][j] === 4){
           found++;
         }
       }
     }
   }
-  this.board = board;
-  return board;
+  return generatedBoard;
 };
 
 Game.prototype.reverseBoard = function(){
@@ -222,7 +225,7 @@ Game.prototype.checkIfWon = function(){
       }
     }
     return false;
-  }
+  };
 
   for(var i = 0; i < this.board.length; i++) {
     if (containsObject(2048, this.board[i])){
