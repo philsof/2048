@@ -4,7 +4,4 @@ $(document).ready(function(){
   controller = new Controller(game, view);
   view.controller = controller;
   controller.start();
-  $('#new-game-button').on('click', function(event){
-    controller.newGame();
-  });
 });
