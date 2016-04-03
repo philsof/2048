@@ -26,18 +26,17 @@ Game.prototype.generateStartingBoard = function(){
   while (spawnedCells !== 2){
     generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
     spawnedCells = 0;
-    randNestedIndexes = []
-    randStartingValues = []
+    randNestedIndexes = [];
+    randStartingValues = [];
     spawnValues = [2,2,2,2,2,2,2,2,2,4];
     for (var i = 1; i <= 4; i++) {
-      randNestedIndexes = []
-      randNestedIndexes.push(Math.floor(Math.random() * generatedBoard.length))
+      randNestedIndexes.push(Math.floor(Math.random() * generatedBoard.length)); 
     }
     for (var j = 1; j <= 2; j++) {
-      randStartingValues.push(spawnValues[Math.floor(Math.random() * spawnValues.length)])
+      randStartingValues.push(spawnValues[Math.floor(Math.random() * spawnValues.length)]);
     }
-    generatedBoard[randIndexes[0]][randIndexes[1]] = randStartingValues[0];
-    generatedBoard[randIndexes[2]][randIndexes[3]] = randStartingValues[1];
+    generatedBoard[randNestedIndexes[0]][randNestedIndexes[1]] = randStartingValues[0];
+    generatedBoard[randNestedIndexes[2]][randNestedIndexes[3]] = randStartingValues[1];
     for(var i = 0; i < generatedBoard.length; i++) {
       for(var j = 0; j < generatedBoard[i].length; j++) {
         if (generatedBoard[i][j] === 2){
