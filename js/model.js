@@ -3,40 +3,48 @@ function Game(board) {
     this.board = board;
   } 
   else { 
-    this.board = this.generateStartBoard();
+    this.board = this.generateStartingBoard();
   }
   this.previousBoard = [];
-  this.score = 0;
+  this.score = this.generateStartingScore();
 }
 
-Game.prototype.generateStartBoard = function(){
-  var found, storedBoard, generatedBoard;
+Game.prototype.generateStartingScore = function () {
   if (localStorage.score){
-    this.score = parseInt(localStorage.score);
+    return parseInt(localStorage.score);
+  } else {
+    return 0;
   }
+};
+
+Game.prototype.generateStartingBoard = function(){
+  var spawnedCells, storedBoard, generatedBoard, randNestedIndexes, randStartingValues, spawnValues;
   if (localStorage.board){
     storedBoard = JSON.parse(localStorage.board);
     return storedBoard;
   }
-  while (found !== 2){
+  while (spawnedCells !== 2){
     generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    found = 0;
-    var randIndex1 = Math.floor(Math.random() * generatedBoard.length);
-    var randIndex2 = Math.floor(Math.random() * generatedBoard.length);
-    var randIndex3 = Math.floor(Math.random() * generatedBoard.length);
-    var randIndex4 = Math.floor(Math.random() * generatedBoard.length);
-    var startingValues = [2,2,2,2,2,2,2,2,2,4];
-    var randStartingValue1 = startingValues[Math.floor(Math.random() * startingValues.length)];
-    var randStartingValue2 = startingValues[Math.floor(Math.random() * startingValues.length)];
-    generatedBoard[randIndex1][randIndex2] = randStartingValue1;
-    generatedBoard[randIndex3][randIndex4] = randStartingValue2;
+    spawnedCells = 0;
+    randNestedIndexes = []
+    randStartingValues = []
+    spawnValues = [2,2,2,2,2,2,2,2,2,4];
+    for (var i = 1; i <= 4; i++) {
+      randNestedIndexes = []
+      randNestedIndexes.push(Math.floor(Math.random() * generatedBoard.length))
+    }
+    for (var j = 1; j <= 2; j++) {
+      randStartingValues.push(spawnValues[Math.floor(Math.random() * spawnValues.length)])
+    }
+    generatedBoard[randIndexes[0]][randIndexes[1]] = randStartingValues[0];
+    generatedBoard[randIndexes[2]][randIndexes[3]] = randStartingValues[1];
     for(var i = 0; i < generatedBoard.length; i++) {
       for(var j = 0; j < generatedBoard[i].length; j++) {
         if (generatedBoard[i][j] === 2){
-          found++;
+          spawnedCells++;
         }
         if (generatedBoard[i][j] === 4){
-          found++;
+          spawnedCells++;
         }
       }
     }

@@ -20,7 +20,7 @@ Controller.prototype.move = function(direction) {
 };
 
 Controller.prototype.start = function() {
-  this.game.generateStartBoard();
+  this.game.generateStartingBoard();
   this.view.drawBoard(this.game);
 };
 
