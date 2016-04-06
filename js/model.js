@@ -10,18 +10,39 @@ function Game(board) {
 }
 
 Game.prototype.generateStartingScore = function () {
-  if (localStorage.score){
+  if (this.savedScoreExists()){
     return parseInt(localStorage.score);
   } else {
     return 0;
   }
 };
 
-Game.prototype.generateStartingBoard = function(){
-  var spawnedCells, storedBoard, generatedBoard, randNestedIndexes, randStartingValues, spawnValues;
+Game.prototype.savedScoreExists = function () {
+  if (localStorage.score){
+    return true;
+  } else {
+    return false;
+  }
+};
+
+Game.prototype.savedBoardExists = function () {
   if (localStorage.board){
-    storedBoard = JSON.parse(localStorage.board);
-    return storedBoard;
+    return true;
+  } else {
+    return false;
+  }
+};
+
+Game.prototype.loadSavedBoard = function(){
+  if (localStorage.board){
+    return JSON.parse(localStorage.board);
+  }
+};
+
+Game.prototype.generateStartingBoard = function(){
+  var spawnedCells, generatedBoard, randNestedIndexes, randStartingValues, spawnValues;
+  if (this.savedBoardExists()){
+    return this.loadSavedBoard();
   }
   while (spawnedCells !== 2){
     generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
