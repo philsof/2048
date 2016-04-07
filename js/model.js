@@ -40,35 +40,27 @@ Game.prototype.loadSavedBoard = function(){
 };
 
 Game.prototype.generateStartingBoard = function(){
-  var spawnedCells, generatedBoard, randNestedIndexes, randStartingValues, spawnValues;
+  var generatedBoard, spawnValues, boardCoordinates;
+  
   if (this.savedBoardExists()){
     return this.loadSavedBoard();
   }
-  while (spawnedCells !== 2){
-    generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    spawnedCells = 0;
-    randNestedIndexes = [];
-    randStartingValues = [];
-    spawnValues = [2,2,2,2,2,2,2,2,2,4];
-    for (var i = 1; i <= 4; i++) {
-      randNestedIndexes.push(Math.floor(Math.random() * generatedBoard.length)); 
-    }
-    for (var j = 1; j <= 2; j++) {
-      randStartingValues.push(spawnValues[Math.floor(Math.random() * spawnValues.length)]);
-    }
-    generatedBoard[randNestedIndexes[0]][randNestedIndexes[1]] = randStartingValues[0];
-    generatedBoard[randNestedIndexes[2]][randNestedIndexes[3]] = randStartingValues[1];
-    for(var i = 0; i < generatedBoard.length; i++) {
-      for(var j = 0; j < generatedBoard[i].length; j++) {
-        if (generatedBoard[i][j] === 2){
-          spawnedCells++;
-        }
-        if (generatedBoard[i][j] === 4){
-          spawnedCells++;
-        }
-      }
+  
+  generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  boardCoordinates = [];
+  
+  for (var k = 0; k < generatedBoard.length; k++) {
+    for (var m = 0; m < 4; m++) {
+      boardCoordinates.push([k,m]);
     }
   }
+  shuffledBoardCoordinates = shuffle(boardCoordinates);
+  spawnValues = [2,2,2,2,2,2,2,2,2,4];
+  spawnValues = shuffle(spawnValues);
+
+  generatedBoard[boardCoordinates[0][0]][boardCoordinates[0][1]] = spawnValues[0];
+  generatedBoard[boardCoordinates[1][0]][boardCoordinates[1][1]] = spawnValues[1];
+
   return generatedBoard;
 };
 
@@ -314,3 +306,15 @@ Array.prototype.equals = function (array) {
 
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
