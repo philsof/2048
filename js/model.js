@@ -71,12 +71,8 @@ Game.prototype.reverseBoard = function(){
 };
 
 Game.prototype.move = function(direction){
-  var boardCopy = [];
-
-  for (var i = 0; i < this.board.length; i++){
-    boardCopy[i] = this.board[i].slice();
-  }
-  this.previousBoard = boardCopy;
+  // store board before move, to determine if move changes board
+  this.previousBoard = JSON.parse(JSON.stringify(this.board));
 
   if (direction === "left"){
     this.removeZeros();
