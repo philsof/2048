@@ -5,3 +5,7 @@ document.addEventListener('DOMContentLoaded', function(){
   view.controller = controller;
   controller.start();
 });
+
+//test boards:
+// [[2,4,8,16],[16,8,4,2],[2,4,8,16],[16,8,4,2]]
+// [[2,4,8,16],[32,64,128,256],[512,1024,512,2],[2,4,8,0]]
