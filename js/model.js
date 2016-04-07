@@ -54,9 +54,10 @@ Game.prototype.generateStartingBoard = function(){
       boardCoordinates.push([k,m]);
     }
   }
-  shuffledBoardCoordinates = shuffle(boardCoordinates);
+  shuffle(boardCoordinates);
+  
   spawnValues = [2,2,2,2,2,2,2,2,2,4];
-  spawnValues = shuffle(spawnValues);
+  shuffle(spawnValues);
 
   generatedBoard[boardCoordinates[0][0]][boardCoordinates[0][1]] = spawnValues[0];
   generatedBoard[boardCoordinates[1][0]][boardCoordinates[1][1]] = spawnValues[1];
