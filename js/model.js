@@ -50,7 +50,7 @@ Game.prototype.generateStartingBoard = function(){
   boardCoordinates = [];
   
   for (var k = 0; k < generatedBoard.length; k++) {
-    for (var m = 0; m < 4; m++) {
+    for (var m = 0; m < generatedBoard[k].length; m++) {
       boardCoordinates.push([k,m]);
     }
   }
