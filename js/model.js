@@ -178,7 +178,7 @@ Game.prototype.spawn = function(){
     }
   }
   if (emptyTileCoordinates.length === 0){
-    this.gameOver();
+    this.isGameOver();
     return;
   }
   if (board.equals(previousBoard)){
@@ -207,7 +207,7 @@ Game.prototype.isWon = function(){
   }
 };
 
-Game.prototype.gameOver = function(){
+Game.prototype.isGameOver = function(){
   var match = false;
   for(var i = 0; i < this.board.length-1; i++) {
     for(var j = 0; j < this.board[i].length; j++){
