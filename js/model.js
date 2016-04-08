@@ -126,7 +126,7 @@ Game.prototype.moveTiles = function(direction){
 };
 
 Game.prototype.left = function(){
-  this.removeZeros();
+  this.cleanBoard();
   var board = this.board;
   var newRow = [];
   for(var i = 0; i < board.length; i++) {
@@ -184,7 +184,7 @@ Game.prototype.left = function(){
   } 
 };
     
-Game.prototype.removeZeros = function(){
+Game.prototype.cleanBoard = function(){
   var board = this.board;
   for(var i = 0; i < board.length; i++) {
     for(var j = board[i].length - 1; j >= 0; j--) {
