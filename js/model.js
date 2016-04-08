@@ -108,22 +108,17 @@ Game.prototype.mergeTilesLeft = function(){
           newRow.push(board[i][0] * 2);
           this.score += board[i][0] * 2;
         } else {
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1]);
+          newRow = board[i];
         }
       } else if (board[i].length === 3) {
         if (board[i][0] === board[i][1]){
-          newRow.push(board[i][0] * 2);
+          newRow.push(board[i][0] * 2, board[i][2]);
           this.score += board[i][0] * 2;
-          newRow.push(board[i][2]);
         } else if (board[i][1] === board[i][2]){
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1] * 2);
+          newRow.push(board[i][0], board[i][1] * 2);
           this.score += board[i][1] * 2;
         } else {
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1]);
-          newRow.push(board[i][2]);
+          newRow = board[i];
         }
       } else if (board[i].length === 4){
         if (board[i][0] === board[i][1]){
@@ -133,18 +128,13 @@ Game.prototype.mergeTilesLeft = function(){
             newRow.push(board[i][2] * 2);
             this.score += board[i][2] * 2;
           } else {
-            newRow.push(board[i][2]);
-            newRow.push(board[i][3]);
+            newRow.push(board[i][2], board[i][3]);
           }
         } else if (board[i][1] === board[i][2]){
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1] * 2);
+          newRow.push(board[i][0], board[i][1] * 2, board[i][3]);
           this.score += board[i][1] * 2;
-          newRow.push(board[i][3]);
         } else if (board[i][2] === board[i][3]){
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1]);
-          newRow.push(board[i][2] * 2);
+          newRow.push(board[i][0], board[i][1], board[i][2] * 2);
           this.score += board[i][2] * 2;
         } else {
           newRow = board[i];
