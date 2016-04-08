@@ -25,20 +25,6 @@ Game.prototype.savedScoreExists = function () {
   }
 };
 
-Game.prototype.savedBoardExists = function () {
-  if (localStorage.board){
-    return true;
-  } else {
-    return false;
-  }
-};
-
-Game.prototype.loadSavedBoard = function(){
-  if (localStorage.board){
-    return JSON.parse(localStorage.board);
-  }
-};
-
 Game.prototype.generateStartingBoard = function(){
   var generatedBoard, spawnValues, boardCoordinates;
   
@@ -65,11 +51,20 @@ Game.prototype.generateStartingBoard = function(){
   return generatedBoard;
 };
 
-Game.prototype.reverseBoard = function(){
-  for(var i = 0; i < this.board.length; i++) {
-    this.board[i].reverse();
+Game.prototype.savedBoardExists = function () {
+  if (localStorage.board){
+    return true;
+  } else {
+    return false;
   }
 };
+
+Game.prototype.loadSavedBoard = function(){
+  if (localStorage.board){
+    return JSON.parse(localStorage.board);
+  }
+};
+
 
 Game.prototype.moveTiles = function(direction){
   // store board before move, to determine if move changes board
@@ -145,6 +140,22 @@ Game.prototype.mergeTilesLeft = function(){
   } 
   this.padBoard();
 };
+
+Game.prototype.reverseBoard = function(){
+  for(var i = 0; i < this.board.length; i++) {
+    this.board[i].reverse();
+  }
+};
+
+Game.prototype.transposeBoard = function() {
+  var board = this.board;
+  var transposedArray = board[0].map(function(col, i) {
+    return board.map(function(row) { 
+      return row[i];
+    });
+  });
+  this.board = transposedArray; 
+};
     
 Game.prototype.cleanBoard = function(){
   var board = this.board;
@@ -188,6 +199,17 @@ Game.prototype.spawn = function(){
   this.board = board;
 };
 
+Game.prototype.isBoardFull = function() {
+  var isFull = true, board = this.board;
+  for (var i = 0; i < board.length; i++) {
+    if (board[i].includes(0)){
+      isFull = false;
+      break;
+    }
+  }
+  return isFull;
+};
+
 Game.prototype.isWon = function() {
   for(var i = 0; i < this.board.length; i++) {
     if (this.board[i].includes(2048)) {
@@ -219,24 +241,16 @@ Game.prototype.isLost = function(){
   }
 };
 
-// Warn if overriding existing method
-if(Array.prototype.equals) {
-  console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."); }
-// attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = function (array) {
-  // if the other array is a falsy value, return
   if (!array) {
     return false;
   }
-  // compare lengths - can save a lot of time 
   if (this.length != array.length) {
     return false;
   }
 
   for (var i = 0, l=this.length; i < l; i++) {
-    // Check if we have nested arrays
     if (this[i] instanceof Array && array[i] instanceof Array) {
-      // recurse into the nested arrays
       if (!this[i].equals(array[i])) {
         return false;       
       }
@@ -261,25 +275,4 @@ function shuffle(array) {
     array[randomIndex] = temporaryValue;
   }
   return array;
-}
-
-Game.prototype.transposeBoard = function() {
-  var board = this.board;
-  var transposedArray = board[0].map(function(col, i) {
-    return board.map(function(row) { 
-      return row[i];
-    });
-  });
-  this.board = transposedArray; 
-};
-
-Game.prototype.isBoardFull = function() {
-  var isFull = true, board = this.board;
-  for (var i = 0; i < board.length; i++) {
-    if (board[i].includes(0)){
-      isFull = false;
-      break;
-    }
-  }
-  return isFull;
 }
