@@ -77,12 +77,12 @@ Game.prototype.moveTiles = function(direction){
 
   if (direction === "left"){
     this.left();
-    this.pad();
+    this.padBoard();
   }
   if (direction === "right"){
     this.reverseBoard();
     this.left();
-    this.pad();
+    this.padBoard();
     this.reverseBoard();
   }  
   if (direction === "up"){
@@ -94,7 +94,7 @@ Game.prototype.moveTiles = function(direction){
     });
     this.board = transposeBoard;
     this.left();
-    this.pad();
+    this.padBoard();
     var board = this.board;
     var transposeBoard = board[0].map(function(col, i) { 
       return board.map(function(row) { 
@@ -113,7 +113,7 @@ Game.prototype.moveTiles = function(direction){
     this.board = transposeBoard;
     this.reverseBoard();
     this.left();
-    this.pad();
+    this.padBoard();
     this.reverseBoard();
     var board = this.board;
     var transposeBoard = board[0].map(function(col, i) { 
@@ -196,7 +196,7 @@ Game.prototype.cleanBoard = function(){
   this.board = board;
 };
 
-Game.prototype.pad = function(){
+Game.prototype.padBoard = function(){
   var board = this.board;
   for(var i = 0; i < board.length; i++) {
     while (board[i].length < 4){
