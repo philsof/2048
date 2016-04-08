@@ -170,6 +170,9 @@ Game.prototype.padBoard = function(){
 
 Game.prototype.spawn = function(){
   var board = this.board, previousBoard = this.previousBoard, emptyTileCoordinates = [];
+  if (board.equals(previousBoard)){
+    return;
+  }
   if (this.isBoardFull()) {
     return;
   }
@@ -179,9 +182,6 @@ Game.prototype.spawn = function(){
         emptyTileCoordinates.push([i, j]);
       }
     }
-  }
-  if (board.equals(previousBoard)){
-    return;
   }
   shuffle(emptyTileCoordinates);
   board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = 2;
