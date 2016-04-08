@@ -3,44 +3,65 @@ function Game(board) {
     this.board = board;
   } 
   else { 
-    this.board = this.generateStartBoard();
+    this.board = this.generateStartingBoard();
   }
   this.previousBoard = [];
-  this.score = 0;
+  this.score = this.generateStartingScore();
 }
 
-Game.prototype.generateStartBoard = function(){
-  var found, storedBoard, generatedBoard;
+Game.prototype.generateStartingScore = function () {
+  if (this.savedScoreExists()){
+    return parseInt(localStorage.score);
+  } else {
+    return 0;
+  }
+};
+
+Game.prototype.savedScoreExists = function () {
   if (localStorage.score){
-    this.score = parseInt(localStorage.score);
+    return true;
+  } else {
+    return false;
   }
+};
+
+Game.prototype.savedBoardExists = function () {
   if (localStorage.board){
-    storedBoard = JSON.parse(localStorage.board);
-    return storedBoard;
+    return true;
+  } else {
+    return false;
   }
-  while (found !== 2){
-    generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-    found = 0;
-    var randIndex1 = Math.floor(Math.random() * generatedBoard.length);
-    var randIndex2 = Math.floor(Math.random() * generatedBoard.length);
-    var randIndex3 = Math.floor(Math.random() * generatedBoard.length);
-    var randIndex4 = Math.floor(Math.random() * generatedBoard.length);
-    var startingValues = [2,2,2,2,2,2,2,2,2,4];
-    var randStartingValue1 = startingValues[Math.floor(Math.random() * startingValues.length)];
-    var randStartingValue2 = startingValues[Math.floor(Math.random() * startingValues.length)];
-    generatedBoard[randIndex1][randIndex2] = randStartingValue1;
-    generatedBoard[randIndex3][randIndex4] = randStartingValue2;
-    for(var i = 0; i < generatedBoard.length; i++) {
-      for(var j = 0; j < generatedBoard[i].length; j++) {
-        if (generatedBoard[i][j] === 2){
-          found++;
-        }
-        if (generatedBoard[i][j] === 4){
-          found++;
-        }
-      }
+};
+
+Game.prototype.loadSavedBoard = function(){
+  if (localStorage.board){
+    return JSON.parse(localStorage.board);
+  }
+};
+
+Game.prototype.generateStartingBoard = function(){
+  var generatedBoard, spawnValues, boardCoordinates;
+  
+  if (this.savedBoardExists()){
+    return this.loadSavedBoard();
+  }
+  
+  generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  boardCoordinates = [];
+  
+  for (var k = 0; k < generatedBoard.length; k++) {
+    for (var m = 0; m < generatedBoard[k].length; m++) {
+      boardCoordinates.push([k,m]);
     }
   }
+  shuffle(boardCoordinates);
+  
+  spawnValues = [2,2,2,2,2,2,2,2,2,4];
+  shuffle(spawnValues);
+
+  generatedBoard[boardCoordinates[0][0]][boardCoordinates[0][1]] = spawnValues[0];
+  generatedBoard[boardCoordinates[1][0]][boardCoordinates[1][1]] = spawnValues[1];
+
   return generatedBoard;
 };
 
@@ -50,71 +71,35 @@ Game.prototype.reverseBoard = function(){
   }
 };
 
-Game.prototype.move = function(direction){
-  var boardCopy = [];
-
-  for (var i = 0; i < this.board.length; i++){
-    boardCopy[i] = this.board[i].slice();
-  }
-  this.previousBoard = boardCopy;
+Game.prototype.moveTiles = function(direction){
+  // store board before move, to determine if move changes board
+  this.previousBoard = JSON.parse(JSON.stringify(this.board));
 
   if (direction === "left"){
-    this.removeZeros();
-    this.left();
-    this.pad();
+    this.mergeTilesLeft();
   }
   if (direction === "right"){
-    this.removeZeros();
     this.reverseBoard();
-    this.left();
-    this.pad();
+    this.mergeTilesLeft();
     this.reverseBoard();
   }  
   if (direction === "up"){
-    var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i] ;
-      });
-    });
-    this.board = transposeBoard;
-    this.removeZeros();
-    this.left();
-    this.pad();
-    var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i];
-      });
-    });
-    this.board = transposeBoard;
+    this.transposeBoard();
+    this.mergeTilesLeft();
+    this.transposeBoard();
   }  
   if (direction === "down"){
-    var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i] ;
-      });
-    });
-    this.board = transposeBoard;
-    this.removeZeros();
+    this.transposeBoard();
     this.reverseBoard();
-    this.left();
-    this.pad();
+    this.mergeTilesLeft();
     this.reverseBoard();
-    var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i] ;
-      });
-    });
-    this.board = transposeBoard;
+    this.transposeBoard();
   }  
 };
 
-Game.prototype.left = function(){
-  var board = this.board;
-  var newRow = [];
+Game.prototype.mergeTilesLeft = function(){
+  var newRow, board = this.board;
+  this.cleanBoard();
   for(var i = 0; i < board.length; i++) {
     newRow = [];
     if (board[i].length > 1){
@@ -123,22 +108,17 @@ Game.prototype.left = function(){
           newRow.push(board[i][0] * 2);
           this.score += board[i][0] * 2;
         } else {
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1]);
+          newRow = board[i];
         }
       } else if (board[i].length === 3) {
         if (board[i][0] === board[i][1]){
-          newRow.push(board[i][0] * 2);
+          newRow.push(board[i][0] * 2, board[i][2]);
           this.score += board[i][0] * 2;
-          newRow.push(board[i][2]);
         } else if (board[i][1] === board[i][2]){
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1] * 2);
+          newRow.push(board[i][0], board[i][1] * 2);
           this.score += board[i][1] * 2;
         } else {
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1]);
-          newRow.push(board[i][2]);
+          newRow = board[i];
         }
       } else if (board[i].length === 4){
         if (board[i][0] === board[i][1]){
@@ -148,18 +128,13 @@ Game.prototype.left = function(){
             newRow.push(board[i][2] * 2);
             this.score += board[i][2] * 2;
           } else {
-            newRow.push(board[i][2]);
-            newRow.push(board[i][3]);
+            newRow.push(board[i][2], board[i][3]);
           }
         } else if (board[i][1] === board[i][2]){
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1] * 2);
+          newRow.push(board[i][0], board[i][1] * 2, board[i][3]);
           this.score += board[i][1] * 2;
-          newRow.push(board[i][3]);
         } else if (board[i][2] === board[i][3]){
-          newRow.push(board[i][0]);
-          newRow.push(board[i][1]);
-          newRow.push(board[i][2] * 2);
+          newRow.push(board[i][0], board[i][1], board[i][2] * 2);
           this.score += board[i][2] * 2;
         } else {
           newRow = board[i];
@@ -168,9 +143,10 @@ Game.prototype.left = function(){
       this.board[i] = newRow;
     }
   } 
+  this.padBoard();
 };
     
-Game.prototype.removeZeros = function(){
+Game.prototype.cleanBoard = function(){
   var board = this.board;
   for(var i = 0; i < board.length; i++) {
     for(var j = board[i].length - 1; j >= 0; j--) {
@@ -182,7 +158,7 @@ Game.prototype.removeZeros = function(){
   this.board = board;
 };
 
-Game.prototype.pad = function(){
+Game.prototype.padBoard = function(){
   var board = this.board;
   for(var i = 0; i < board.length; i++) {
     while (board[i].length < 4){
@@ -193,65 +169,53 @@ Game.prototype.pad = function(){
 };
 
 Game.prototype.spawn = function(){
-  var board = this.board;
-  var previousBoard = this.previousBoard;    
-  var emptySpaces = [];
-  for(var i = 0; i < board.length; i++) {
-    for(var j = 0; j < board[i].length; j++) {
-      if (board[i][j] === 0){
-        emptySpaces.push([i, j]);
-      }
-    }
-  }
-  if (emptySpaces.length === 0){
-    this.gameOver();
-    return;
-  }
+  var board = this.board, previousBoard = this.previousBoard, emptyTileCoordinates = [];
   if (board.equals(previousBoard)){
     return;
   }
-  var randIndex = Math.floor(Math.random() * emptySpaces.length);
-  var randSpace = emptySpaces[randIndex];
-  board[randSpace[0]][randSpace[1]] = 2;
+  if (this.isBoardFull()) {
+    return;
+  }
+  for(var i = 0; i < board.length; i++) {
+    for(var j = 0; j < board[i].length; j++) {
+      if (board[i][j] === 0){
+        emptyTileCoordinates.push([i, j]);
+      }
+    }
+  }
+  shuffle(emptyTileCoordinates);
+  board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = 2;
   this.board = board;
 };
 
-Game.prototype.checkIfWon = function(){
-  var containsObject = function(obj, list) {
-    var i;
-    for (i = 0; i < list.length; i++) {
-      if (list[i] === obj) {
-        return true;
-      }
-    }
-    return false;
-  };
-
+Game.prototype.isWon = function() {
   for(var i = 0; i < this.board.length; i++) {
-    if (containsObject(2048, this.board[i])){
-      alert("YOU GOT 2048! YOU WON!");
+    if (this.board[i].includes(2048)) {
+      return true;
     }
   }
+  return false;
 };
 
-Game.prototype.gameOver = function(){
-  var match = false;
-  for(var i = 0; i < this.board.length-1; i++) {
-    for(var j = 0; j < this.board[i].length; j++){
-      if (this.board[i][j] === this.board[i+1][j]){
-        match = true;
-      }  
+Game.prototype.isLost = function(){
+  if (this.isBoardFull()){
+    for(var i = 0; i < this.board.length-1; i++) {
+      for(var j = 0; j < this.board[i].length; j++){
+        if (this.board[i][j] === this.board[i+1][j]){
+          return false;
+        }  
+      }
     }
-  }
-  for(var i = 0; i < this.board.length; i++) {
-    for(var j = 0; j < this.board[i].length-1; j++){
-      if (this.board[i][j] === this.board[i][j+1]){
-        match = true;
-      }  
+    for(var m = 0; m < this.board.length; m++) {
+      for(var n = 0; n < this.board[m].length-1; n++){
+        if (this.board[m][n] === this.board[m][n+1]){
+          return false;
+        }  
+      }
     }
-  }
-  if (match === false){
-     alert("Game Over!");
+    return true;
+  } else {
+    return false;
   }
 };
 
@@ -286,3 +250,36 @@ Array.prototype.equals = function (array) {
 
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+}
+
+Game.prototype.transposeBoard = function() {
+  var board = this.board;
+  var transposedArray = board[0].map(function(col, i) {
+    return board.map(function(row) { 
+      return row[i];
+    });
+  });
+  this.board = transposedArray; 
+};
+
+Game.prototype.isBoardFull = function() {
+  var isFull = true, board = this.board;
+  for (var i = 0; i < board.length; i++) {
+    if (board[i].includes(0)){
+      isFull = false;
+      break;
+    }
+  }
+  return isFull;
+}

@@ -3,10 +3,15 @@ function Controller(game, view) {
    this.view = view;
 }
 
-Controller.prototype.move = function(direction) {
-  this.game.move(direction);
+Controller.prototype.moveTiles = function(direction) {
+  this.game.moveTiles(direction);
   this.view.drawBoard(this.game);
-  this.game.checkIfWon();
+  if (this.game.isWon()) {
+    this.view.alertGameWon();
+  }
+  if (this.game.isLost()){
+    this.view.alertGameOver();
+  }
   setTimeout(function(){ 
     this.game.spawn(); 
     this.view.drawBoard(this.game);
@@ -20,7 +25,7 @@ Controller.prototype.move = function(direction) {
 };
 
 Controller.prototype.start = function() {
-  this.game.generateStartBoard();
+  this.game.generateStartingBoard();
   this.view.drawBoard(this.game);
 };
 
