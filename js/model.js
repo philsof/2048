@@ -87,41 +87,21 @@ Game.prototype.moveTiles = function(direction){
   }  
   if (direction === "up"){
     var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i] ;
-      });
-    });
-    this.board = transposeBoard;
+    this.board = transpose(board);
     this.left();
     this.padBoard();
     var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i];
-      });
-    });
-    this.board = transposeBoard;
+    this.board = transpose(board);
   }  
   if (direction === "down"){
     var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i] ;
-      });
-    });
-    this.board = transposeBoard;
+    this.board = transpose(board);
     this.reverseBoard();
     this.left();
     this.padBoard();
     this.reverseBoard();
     var board = this.board;
-    var transposeBoard = board[0].map(function(col, i) { 
-      return board.map(function(row) { 
-        return row[i] ;
-      });
-    });
-    this.board = transposeBoard;
+    this.board = transpose(board);
   }  
 };
 
@@ -311,4 +291,13 @@ function shuffle(array) {
     array[randomIndex] = temporaryValue;
   }
   return array;
+}
+
+function transpose(array) {
+  var transposedArray = array[0].map(function(col, i) { 
+    return array.map(function(row) { 
+      return row[i] 
+    })
+  })
+  return transposedArray;
 }
