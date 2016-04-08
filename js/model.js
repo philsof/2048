@@ -98,8 +98,8 @@ Game.prototype.moveTiles = function(direction){
 };
 
 Game.prototype.mergeTilesLeft = function(){
-  this.cleanBoard();
   var newRow, board = this.board;
+  this.cleanBoard();
   for(var i = 0; i < board.length; i++) {
     newRow = [];
     if (board[i].length > 1){
