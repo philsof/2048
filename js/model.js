@@ -77,19 +77,16 @@ Game.prototype.moveTiles = function(direction){
 
   if (direction === "left"){
     this.left();
-    this.padBoard();
   }
   if (direction === "right"){
     this.reverseBoard();
     this.left();
-    this.padBoard();
     this.reverseBoard();
   }  
   if (direction === "up"){
     var board = this.board;
     this.board = transpose(board);
     this.left();
-    this.padBoard();
     var board = this.board;
     this.board = transpose(board);
   }  
@@ -98,7 +95,6 @@ Game.prototype.moveTiles = function(direction){
     this.board = transpose(board);
     this.reverseBoard();
     this.left();
-    this.padBoard();
     this.reverseBoard();
     var board = this.board;
     this.board = transpose(board);
@@ -162,6 +158,7 @@ Game.prototype.left = function(){
       this.board[i] = newRow;
     }
   } 
+  this.padBoard();
 };
     
 Game.prototype.cleanBoard = function(){
