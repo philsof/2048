@@ -3,8 +3,8 @@ function Controller(game, view) {
    this.view = view;
 }
 
-Controller.prototype.move = function(direction) {
-  this.game.move(direction);
+Controller.prototype.moveTiles = function(direction) {
+  this.game.moveTiles(direction);
   this.view.drawBoard(this.game);
   this.game.checkIfWon();
   setTimeout(function(){ 

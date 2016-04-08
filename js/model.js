@@ -71,7 +71,7 @@ Game.prototype.reverseBoard = function(){
   }
 };
 
-Game.prototype.move = function(direction){
+Game.prototype.moveTiles = function(direction){
   // store board before move, to determine if move changes board
   this.previousBoard = JSON.parse(JSON.stringify(this.board));
 

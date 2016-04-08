@@ -30,16 +30,16 @@ View.prototype.setupHandlers = function() {
   document.addEventListener('keyup', function(event){
     switch (event.which) {
       case 37:
-        this.controller.move('left');
+        this.controller.moveTiles('left');
         break;
       case 38:
-        this.controller.move('up');
+        this.controller.moveTiles('up');
         break;
       case 39:
-        this.controller.move('right');
+        this.controller.moveTiles('right');
         break;
       case 40:
-        this.controller.move('down');
+        this.controller.moveTiles('down');
         break;
     }
   }.bind(this));
