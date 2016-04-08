@@ -84,20 +84,16 @@ Game.prototype.moveTiles = function(direction){
     this.reverseBoard();
   }  
   if (direction === "up"){
-    var board = this.board;
-    this.board = transpose(board);
+    this.transposeBoard();
     this.mergeTilesLeft();
-    var board = this.board;
-    this.board = transpose(board);
+    this.transposeBoard();
   }  
   if (direction === "down"){
-    var board = this.board;
-    this.board = transpose(board);
+    this.transposeBoard();
     this.reverseBoard();
     this.mergeTilesLeft();
     this.reverseBoard();
-    var board = this.board;
-    this.board = transpose(board);
+    this.transposeBoard();
   }  
 };
 
@@ -290,11 +286,12 @@ function shuffle(array) {
   return array;
 }
 
-function transpose(array) {
-  var transposedArray = array[0].map(function(col, i) { 
-    return array.map(function(row) { 
-      return row[i] 
-    })
-  })
-  return transposedArray;
-}
+Game.prototype.transposeBoard = function() {
+  var board = this.board;
+  var transposedArray = board[0].map(function(col, i) {
+    return board.map(function(row) { 
+      return row[i];
+    });
+  });
+  this.board = transposedArray; 
+};
