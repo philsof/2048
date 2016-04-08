@@ -192,7 +192,7 @@ Game.prototype.spawn = function(){
   this.board = board;
 };
 
-Game.prototype.checkIfWon = function(){
+Game.prototype.isWon = function(){
   var containsObject = function(obj, list) {
     var i;
     for (i = 0; i < list.length; i++) {

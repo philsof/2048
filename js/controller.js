@@ -6,7 +6,7 @@ function Controller(game, view) {
 Controller.prototype.moveTiles = function(direction) {
   this.game.moveTiles(direction);
   this.view.drawBoard(this.game);
-  this.game.checkIfWon();
+  this.game.isWon();
   setTimeout(function(){ 
     this.game.spawn(); 
     this.view.drawBoard(this.game);
