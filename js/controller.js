@@ -6,7 +6,9 @@ function Controller(game, view) {
 Controller.prototype.moveTiles = function(direction) {
   this.game.moveTiles(direction);
   this.view.drawBoard(this.game);
-  this.game.isWon();
+  if (this.game.isWon()) {
+    this.view.alertGameWon();
+  }
   if (this.game.isLost()){
     this.view.alertGameOver();
   }

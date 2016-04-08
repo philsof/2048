@@ -52,3 +52,7 @@ View.prototype.setupHandlers = function() {
 View.prototype.alertGameOver = function() {
   return alert("Game over! No more moves are possible. Try again? Click the New Game button!");
 };
+
+View.prototype.alertGameWon = function() {
+  return alert("YOU GOT 2048! YOU WON!");
+};

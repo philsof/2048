@@ -188,22 +188,13 @@ Game.prototype.spawn = function(){
   this.board = board;
 };
 
-Game.prototype.isWon = function(){
-  var containsObject = function(obj, list) {
-    var i;
-    for (i = 0; i < list.length; i++) {
-      if (list[i] === obj) {
-        return true;
-      }
-    }
-    return false;
-  };
-
+Game.prototype.isWon = function() {
   for(var i = 0; i < this.board.length; i++) {
-    if (containsObject(2048, this.board[i])){
-      alert("YOU GOT 2048! YOU WON!");
+    if (this.board[i].includes(2048)) {
+      return true;
     }
   }
+  return false;
 };
 
 Game.prototype.isLost = function(){
