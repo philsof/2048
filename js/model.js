@@ -170,16 +170,15 @@ Game.prototype.padBoard = function(){
 
 Game.prototype.spawn = function(){
   var board = this.board, previousBoard = this.previousBoard, emptyTileCoordinates = [];
+  if (this.isBoardFull()) {
+    return;
+  }
   for(var i = 0; i < board.length; i++) {
     for(var j = 0; j < board[i].length; j++) {
       if (board[i][j] === 0){
         emptyTileCoordinates.push([i, j]);
       }
     }
-  }
-  if (emptyTileCoordinates.length === 0){
-    this.isGameOver();
-    return;
   }
   if (board.equals(previousBoard)){
     return;
@@ -207,24 +206,25 @@ Game.prototype.isWon = function(){
   }
 };
 
-Game.prototype.isGameOver = function(){
-  var match = false;
-  for(var i = 0; i < this.board.length-1; i++) {
-    for(var j = 0; j < this.board[i].length; j++){
-      if (this.board[i][j] === this.board[i+1][j]){
-        match = true;
-      }  
+Game.prototype.isLost = function(){
+  if (this.isBoardFull()){
+    for(var i = 0; i < this.board.length-1; i++) {
+      for(var j = 0; j < this.board[i].length; j++){
+        if (this.board[i][j] === this.board[i+1][j]){
+          return false;
+        }  
+      }
     }
-  }
-  for(var i = 0; i < this.board.length; i++) {
-    for(var j = 0; j < this.board[i].length-1; j++){
-      if (this.board[i][j] === this.board[i][j+1]){
-        match = true;
-      }  
+    for(var m = 0; m < this.board.length; m++) {
+      for(var n = 0; n < this.board[m].length-1; n++){
+        if (this.board[m][n] === this.board[m][n+1]){
+          return false;
+        }  
+      }
     }
-  }
-  if (match === false){
-     alert("Game Over!");
+    return true;
+  } else {
+    return false;
   }
 };
 
@@ -281,3 +281,14 @@ Game.prototype.transposeBoard = function() {
   });
   this.board = transposedArray; 
 };
+
+Game.prototype.isBoardFull = function() {
+  var isFull = true, board = this.board;
+  for (var i = 0; i < board.length; i++) {
+    if (board[i].includes(0)){
+      isFull = false;
+      break;
+    }
+  }
+  return isFull;
+}

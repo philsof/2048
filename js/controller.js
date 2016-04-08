@@ -7,6 +7,9 @@ Controller.prototype.moveTiles = function(direction) {
   this.game.moveTiles(direction);
   this.view.drawBoard(this.game);
   this.game.isWon();
+  if (this.game.isLost()){
+    this.view.alertGameOver();
+  }
   setTimeout(function(){ 
     this.game.spawn(); 
     this.view.drawBoard(this.game);

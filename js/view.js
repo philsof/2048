@@ -49,3 +49,6 @@ View.prototype.setupHandlers = function() {
   }.bind(this));
 };
 
+View.prototype.alertGameOver = function() {
+  return alert("Game over! No more moves are possible. Try again? Click the New Game button!");
+};
