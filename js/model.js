@@ -76,17 +76,17 @@ Game.prototype.moveTiles = function(direction){
   this.previousBoard = JSON.parse(JSON.stringify(this.board));
 
   if (direction === "left"){
-    this.left();
+    this.mergeTilesLeft();
   }
   if (direction === "right"){
     this.reverseBoard();
-    this.left();
+    this.mergeTilesLeft();
     this.reverseBoard();
   }  
   if (direction === "up"){
     var board = this.board;
     this.board = transpose(board);
-    this.left();
+    this.mergeTilesLeft();
     var board = this.board;
     this.board = transpose(board);
   }  
@@ -94,14 +94,14 @@ Game.prototype.moveTiles = function(direction){
     var board = this.board;
     this.board = transpose(board);
     this.reverseBoard();
-    this.left();
+    this.mergeTilesLeft();
     this.reverseBoard();
     var board = this.board;
     this.board = transpose(board);
   }  
 };
 
-Game.prototype.left = function(){
+Game.prototype.mergeTilesLeft = function(){
   this.cleanBoard();
   var board = this.board;
   var newRow = [];
