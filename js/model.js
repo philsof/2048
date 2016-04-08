@@ -169,25 +169,23 @@ Game.prototype.padBoard = function(){
 };
 
 Game.prototype.spawn = function(){
-  var board = this.board;
-  var previousBoard = this.previousBoard;    
-  var emptySpaces = [];
+  var board = this.board, previousBoard = this.previousBoard, emptyTileCoordinates = [];
   for(var i = 0; i < board.length; i++) {
     for(var j = 0; j < board[i].length; j++) {
       if (board[i][j] === 0){
-        emptySpaces.push([i, j]);
+        emptyTileCoordinates.push([i, j]);
       }
     }
   }
-  if (emptySpaces.length === 0){
+  if (emptyTileCoordinates.length === 0){
     this.gameOver();
     return;
   }
   if (board.equals(previousBoard)){
     return;
   }
-  var randIndex = Math.floor(Math.random() * emptySpaces.length);
-  var randSpace = emptySpaces[randIndex];
+  var randIndex = Math.floor(Math.random() * emptyTileCoordinates.length);
+  var randSpace = emptyTileCoordinates[randIndex];
   board[randSpace[0]][randSpace[1]] = 2;
   this.board = board;
 };
