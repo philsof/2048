@@ -184,9 +184,8 @@ Game.prototype.spawn = function(){
   if (board.equals(previousBoard)){
     return;
   }
-  var randIndex = Math.floor(Math.random() * emptyTileCoordinates.length);
-  var randSpace = emptyTileCoordinates[randIndex];
-  board[randSpace[0]][randSpace[1]] = 2;
+  shuffle(emptyTileCoordinates);
+  board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = 2;
   this.board = board;
 };
 
