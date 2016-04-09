@@ -4,25 +4,23 @@ function Controller(game, view) {
 }
 
 Controller.prototype.moveTiles = function(direction) {
-  this.game.moveTiles(direction);
-  this.view.drawBoard(this.game);
+  if (!this.game.over) {
+    this.game.moveTiles(direction);
+    this.view.drawBoard(this.game);
+  }
   if (this.game.got2048()) {
     this.view.alertGameWon();
   }
-  if (this.game.isOver()){
+  if (this.game.isOver()) {
     this.view.alertGameOver();
   }
-  setTimeout(function(){ 
-    this.game.spawn(); 
-    this.view.drawBoard(this.game);
-    if(typeof(Storage) !== "undefined") {
-      localStorage.board = JSON.stringify(this.game.board);
-      localStorage.score = JSON.stringify(this.game.score);
-      localStorage.won = JSON.stringify(this.game.won);
-    } else {
-    // no local storage support
-    }
-  }, 100);
+  if (!this.game.over) {
+    setTimeout(function() { 
+      this.game.spawn(); 
+      this.view.drawBoard(this.game);
+      this.controller.saveGame();
+    }, 100);
+  }
 };
 
 Controller.prototype.start = function() {
@@ -40,3 +38,12 @@ Controller.prototype.newGame = function() {
   location.reload();
 };
 
+Controller.prototype.saveGame = function() {
+  if(typeof(Storage) !== "undefined") {
+    localStorage.board = JSON.stringify(this.game.board);
+    localStorage.score = JSON.stringify(this.game.score);
+    localStorage.won = JSON.stringify(this.game.won);
+  } else {
+  // no local storage support
+  }
+};
