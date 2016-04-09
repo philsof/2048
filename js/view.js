@@ -1,5 +1,5 @@
 function View(args) {
-  args = args || {}
+  args = args || {};
   this.boardElement = args.boardElement;
   this.scoreElement = args.scoreElement;
   this.newGameButton = args.newGameButton;
