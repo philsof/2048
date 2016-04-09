@@ -26,7 +26,7 @@ Game.prototype.savedScoreExists = function () {
 };
 
 Game.prototype.generateStartingBoard = function(){
-  var generatedBoard, spawnValues, boardCoordinates;
+  var generatedBoard, spawnValues, boardCoordinates, spawnValues = [2,2,2,2,2,2,2,2,2,4];
   
   if (this.savedBoardExists()){
     return this.loadSavedBoard();
@@ -41,8 +41,6 @@ Game.prototype.generateStartingBoard = function(){
     }
   }
   shuffle(boardCoordinates);
-  
-  spawnValues = [2,2,2,2,2,2,2,2,2,4];
   shuffle(spawnValues);
 
   generatedBoard[boardCoordinates[0][0]][boardCoordinates[0][1]] = spawnValues[0];
