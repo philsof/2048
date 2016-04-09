@@ -193,7 +193,7 @@ Game.prototype.spawn = function(){
     }
   }
   shuffle(emptyTileCoordinates);
-  this.board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = 2;
+  this.board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = shuffle([2,2,2,2,2,2,2,2,2,4])[0];
 };
 
 Game.prototype.isBoardFull = function() {
