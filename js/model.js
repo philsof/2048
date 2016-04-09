@@ -96,7 +96,7 @@ Game.prototype.savePreviousBoard = function() {
 
 Game.prototype.mergeTilesLeft = function(){
   var newRow, board = this.board;
-  this.cleanBoard();
+  this.removeBoardPadding();
   for(var i = 0; i < board.length; i++) {
     newRow = [];
     if (board[i].length > 1){
@@ -159,7 +159,7 @@ Game.prototype.transposeBoard = function() {
   this.board = transposedArray; 
 };
     
-Game.prototype.cleanBoard = function(){
+Game.prototype.removeBoardPadding = function(){
   var board = this.board;
   for(var i = 0; i < board.length; i++) {
     for(var j = board[i].length - 1; j >= 0; j--) {
