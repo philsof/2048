@@ -6,10 +6,10 @@ function Controller(game, view) {
 Controller.prototype.moveTiles = function(direction) {
   this.game.moveTiles(direction);
   this.view.drawBoard(this.game);
-  if (this.game.isWon()) {
+  if (this.game.got2048()) {
     this.view.alertGameWon();
   }
-  if (this.game.isLost()){
+  if (this.game.isOver()){
     this.view.alertGameOver();
   }
   setTimeout(function(){ 
@@ -18,6 +18,7 @@ Controller.prototype.moveTiles = function(direction) {
     if(typeof(Storage) !== "undefined") {
       localStorage.board = JSON.stringify(this.game.board);
       localStorage.score = JSON.stringify(this.game.score);
+      localStorage.won = JSON.stringify(this.game.won);
     } else {
     // no local storage support
     }
@@ -32,6 +33,7 @@ Controller.prototype.newGame = function() {
   if(typeof(Storage) !== "undefined") {
     localStorage.removeItem("board");
     localStorage.removeItem("score");
+    localStorage.removeItem("won");
   } else {
     // no local storage support
   }

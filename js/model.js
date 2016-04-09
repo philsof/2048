@@ -6,6 +6,8 @@ function Game(board) {
   }
   this.score = this.generateStartingScore();
   this.previousBoard = [];
+  this.won = this.generateWonStatus();
+  this.over = false;
 }
 
 Game.prototype.generateStartingScore = function() {
@@ -27,6 +29,22 @@ Game.prototype.savedScore = function() {
 Game.prototype.savedBoard = function() {
   if (localStorage.board) {
     return JSON.parse(localStorage.board);
+  } else {
+    return undefined;
+  }
+};
+
+Game.prototype.generateWonStatus = function() {
+  if (this.savedWonStatus()) {
+    return this.savedWonStatus();
+  } else {
+    return false;
+  }
+};
+
+Game.prototype.savedWonStatus = function() {
+  if (localStorage.won) {
+    return JSON.parse(localStorage.won);
   } else {
     return undefined;
   }
@@ -196,17 +214,20 @@ Game.prototype.isBoardFull = function() {
   return true;
 };
 
-Game.prototype.isWon = function() {
-  for(var i = 0; i < this.board.length; i++) {
-    if (this.board[i].includes(2048)) {
-      return true;
+Game.prototype.got2048 = function() {
+  if (!this.won) {
+    for(var i = 0; i < this.board.length; i++) {
+      if (this.board[i].includes(2048)) {
+        this.won = true;
+        return true;
+      }
     }
   }
   return false;
 };
 
-Game.prototype.isLost = function(){
-  if (this.isBoardFull()){
+Game.prototype.isOver = function(){
+  if (this.isBoardFull() && !this.over){
     for(var i = 0; i < this.board.length-1; i++) {
       for(var j = 0; j < this.board[i].length; j++){
         if (this.board[i][j] === this.board[i+1][j]){
@@ -221,6 +242,7 @@ Game.prototype.isLost = function(){
         }  
       }
     }
+    this.over = true;
     return true;
   } else {
     return false;
