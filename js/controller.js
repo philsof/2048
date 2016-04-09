@@ -25,7 +25,6 @@ Controller.prototype.moveTiles = function(direction) {
 };
 
 Controller.prototype.start = function() {
-  this.game.generateStartingBoard();
   this.view.drawBoard(this.game);
 };
 

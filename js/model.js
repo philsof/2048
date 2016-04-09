@@ -1,35 +1,42 @@
 function Game(board) {
   if (board) {
     this.board = board;
-  } 
-  else { 
+  } else { 
     this.board = this.generateStartingBoard();
   }
-  this.previousBoard = [];
   this.score = this.generateStartingScore();
+  this.previousBoard = [];
 }
 
-Game.prototype.generateStartingScore = function () {
-  if (this.savedScoreExists()){
-    return parseInt(localStorage.score);
+Game.prototype.generateStartingScore = function() {
+  if (this.savedScore()) {
+    return this.savedScore();
   } else {
     return 0;
   }
 };
 
-Game.prototype.savedScoreExists = function () {
-  if (localStorage.score){
-    return true;
+Game.prototype.savedScore = function() {
+  if (localStorage.score) {
+    return parseInt(localStorage.score);
   } else {
-    return false;
+    return undefined;
+  }
+};
+
+Game.prototype.savedBoard = function() {
+  if (localStorage.board) {
+    return JSON.parse(localStorage.board);
+  } else {
+    return undefined;
   }
 };
 
 Game.prototype.generateStartingBoard = function(){
-  var generatedBoard, spawnValues, boardCoordinates;
-  
-  if (this.savedBoardExists()){
-    return this.loadSavedBoard();
+  var generatedBoard, boardCoordinates, spawnValues = [2,2,2,2,2,2,2,2,2,4];
+
+  if (this.savedBoard()) {
+    return this.savedBoard();
   }
   
   generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
@@ -41,8 +48,6 @@ Game.prototype.generateStartingBoard = function(){
     }
   }
   shuffle(boardCoordinates);
-  
-  spawnValues = [2,2,2,2,2,2,2,2,2,4];
   shuffle(spawnValues);
 
   generatedBoard[boardCoordinates[0][0]][boardCoordinates[0][1]] = spawnValues[0];
@@ -51,24 +56,8 @@ Game.prototype.generateStartingBoard = function(){
   return generatedBoard;
 };
 
-Game.prototype.savedBoardExists = function () {
-  if (localStorage.board){
-    return true;
-  } else {
-    return false;
-  }
-};
-
-Game.prototype.loadSavedBoard = function(){
-  if (localStorage.board){
-    return JSON.parse(localStorage.board);
-  }
-};
-
-
 Game.prototype.moveTiles = function(direction){
-  // store board before move, to determine if move changes board
-  this.previousBoard = JSON.parse(JSON.stringify(this.board));
+  this.savePreviousBoard();
 
   if (direction === "left"){
     this.mergeTilesLeft();
@@ -92,9 +81,13 @@ Game.prototype.moveTiles = function(direction){
   }  
 };
 
+Game.prototype.savePreviousBoard = function() {
+  this.previousBoard = JSON.parse(JSON.stringify(this.board));
+};
+
 Game.prototype.mergeTilesLeft = function(){
   var newRow, board = this.board;
-  this.cleanBoard();
+  this.removeBoardPadding();
   for(var i = 0; i < board.length; i++) {
     newRow = [];
     if (board[i].length > 1){
@@ -157,57 +150,50 @@ Game.prototype.transposeBoard = function() {
   this.board = transposedArray; 
 };
     
-Game.prototype.cleanBoard = function(){
-  var board = this.board;
-  for(var i = 0; i < board.length; i++) {
-    for(var j = board[i].length - 1; j >= 0; j--) {
-      if(board[i][j] === 0) {
-         board[i].splice(j, 1);
+Game.prototype.removeBoardPadding = function(){
+  for(var i = 0; i < this.board.length; i++) {
+    for(var j = this.board[i].length - 1; j >= 0; j--) {
+      if(this.board[i][j] === 0) {
+         this.board[i].splice(j, 1);
       }
     }
   }
-  this.board = board;
 };
 
 Game.prototype.padBoard = function(){
-  var board = this.board;
-  for(var i = 0; i < board.length; i++) {
-    while (board[i].length < 4){
-      board[i].push(0); 
+  for(var i = 0; i < this.board.length; i++) {
+    while (this.board[i].length < 4){
+      this.board[i].push(0); 
     }
   }
-  this.board = board;
 };
 
 Game.prototype.spawn = function(){
-  var board = this.board, previousBoard = this.previousBoard, emptyTileCoordinates = [];
-  if (board.equals(previousBoard)){
+  var emptyTileCoordinates = [];
+  if (this.board.equals(this.previousBoard)){
     return;
   }
   if (this.isBoardFull()) {
     return;
   }
-  for(var i = 0; i < board.length; i++) {
-    for(var j = 0; j < board[i].length; j++) {
-      if (board[i][j] === 0){
+  for(var i = 0; i < this.board.length; i++) {
+    for(var j = 0; j < this.board[i].length; j++) {
+      if (this.board[i][j] === 0){
         emptyTileCoordinates.push([i, j]);
       }
     }
   }
   shuffle(emptyTileCoordinates);
-  board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = 2;
-  this.board = board;
+  this.board[emptyTileCoordinates[0][0]][emptyTileCoordinates[0][1]] = shuffle([2,2,2,2,2,2,2,2,2,4])[0];
 };
 
 Game.prototype.isBoardFull = function() {
-  var isFull = true, board = this.board;
-  for (var i = 0; i < board.length; i++) {
-    if (board[i].includes(0)){
-      isFull = false;
-      break;
+  for (var i = 0; i < this.board.length; i++) {
+    if (this.board[i].includes(0)){
+      return false;
     }
   }
-  return isFull;
+  return true;
 };
 
 Game.prototype.isWon = function() {
