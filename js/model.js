@@ -7,6 +7,7 @@ function Game(board) {
   this.score = this.generateStartingScore();
   this.previousBoard = [];
   this.won = this.generateWonStatus();
+  this.over = false;
 }
 
 Game.prototype.generateStartingScore = function() {
@@ -225,8 +226,8 @@ Game.prototype.got2048 = function() {
   return false;
 };
 
-Game.prototype.isLost = function(){
-  if (this.isBoardFull()){
+Game.prototype.isOver = function(){
+  if (this.isBoardFull() && !this.over){
     for(var i = 0; i < this.board.length-1; i++) {
       for(var j = 0; j < this.board[i].length; j++){
         if (this.board[i][j] === this.board[i+1][j]){
@@ -241,6 +242,7 @@ Game.prototype.isLost = function(){
         }  
       }
     }
+    this.over = true;
     return true;
   } else {
     return false;

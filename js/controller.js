@@ -9,7 +9,7 @@ Controller.prototype.moveTiles = function(direction) {
   if (this.game.got2048()) {
     this.view.alertGameWon();
   }
-  if (this.game.isLost()){
+  if (this.game.isOver()){
     this.view.alertGameOver();
   }
   setTimeout(function(){ 
