@@ -14,7 +14,9 @@ View.prototype.drawBoard = function(game){
   for(var i = 0; i < board.length; i++) {
     boardHTML += '<tr>';
       for(var j = 0; j < board[i].length; j++) {
-        boardHTML += '<td>';
+        boardHTML += '<td id="val';
+        boardHTML += board[i][j].toString(); 
+        boardHTML +=  '">';
         if (board[i][j] !== 0){
           boardHTML += board[i][j].toString();
         }
