@@ -33,7 +33,7 @@ Game.prototype.savedBoard = function() {
 };
 
 Game.prototype.generateStartingBoard = function(){
-  var generatedBoard, boardCoordinates, spawnValues = [2,2,2,2,2,2,2,2,2,4];
+  var generatedBoard, boardCoordinates, spawnValues = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,4,4];
 
   if (this.savedBoard()) {
     return this.savedBoard();
