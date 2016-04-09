@@ -65,10 +65,8 @@ Game.prototype.loadSavedBoard = function(){
   }
 };
 
-
 Game.prototype.moveTiles = function(direction){
-  // store board before move, to determine if move changes board
-  this.previousBoard = JSON.parse(JSON.stringify(this.board));
+  this.savePreviousBoard();
 
   if (direction === "left"){
     this.mergeTilesLeft();
@@ -90,6 +88,10 @@ Game.prototype.moveTiles = function(direction){
     this.reverseBoard();
     this.transposeBoard();
   }  
+};
+
+Game.prototype.savePreviousBoard = function() {
+  this.previousBoard = JSON.parse(JSON.stringify(this.board));
 };
 
 Game.prototype.mergeTilesLeft = function(){
