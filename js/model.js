@@ -1,35 +1,42 @@
 function Game(board) {
   if (board) {
     this.board = board;
-  } 
-  else { 
+  } else { 
     this.board = this.generateStartingBoard();
   }
-  this.previousBoard = [];
   this.score = this.generateStartingScore();
+  this.previousBoard = [];
 }
 
-Game.prototype.generateStartingScore = function () {
-  if (this.savedScoreExists()){
-    return parseInt(localStorage.score);
+Game.prototype.generateStartingScore = function() {
+  if (this.savedScore()) {
+    return this.savedScore();
   } else {
     return 0;
   }
 };
 
-Game.prototype.savedScoreExists = function () {
-  if (localStorage.score){
-    return true;
+Game.prototype.savedScore = function() {
+  if (localStorage.score) {
+    return parseInt(localStorage.score);
   } else {
-    return false;
+    return undefined;
+  }
+};
+
+Game.prototype.savedBoard = function() {
+  if (localStorage.board) {
+    return JSON.parse(localStorage.board);
+  } else {
+    return undefined;
   }
 };
 
 Game.prototype.generateStartingBoard = function(){
   var generatedBoard, spawnValues, boardCoordinates, spawnValues = [2,2,2,2,2,2,2,2,2,4];
-  
-  if (this.savedBoardExists()){
-    return this.loadSavedBoard();
+
+  if (this.savedBoard()) {
+    return this.savedBoard();
   }
   
   generatedBoard = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
@@ -47,20 +54,6 @@ Game.prototype.generateStartingBoard = function(){
   generatedBoard[boardCoordinates[1][0]][boardCoordinates[1][1]] = spawnValues[1];
 
   return generatedBoard;
-};
-
-Game.prototype.savedBoardExists = function () {
-  if (localStorage.board){
-    return true;
-  } else {
-    return false;
-  }
-};
-
-Game.prototype.loadSavedBoard = function(){
-  if (localStorage.board){
-    return JSON.parse(localStorage.board);
-  }
 };
 
 Game.prototype.moveTiles = function(direction){
